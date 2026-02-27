@@ -573,9 +573,10 @@ MonoBehaviour:
   mapPrefabs:
   - {fileID: 1575790027022115929, guid: fd2f502498d9bc84d9dc967aba73974f, type: 3}
   - {fileID: 1665197809749009814, guid: a739921b6ab3bee428426b6828280af2, type: 3}
-  - {fileID: 221853886081178023, guid: 11de023035849694a836b60324f8053c, type: 3}
-  - {fileID: 8363081217303354869, guid: cc7e24686132b424fbd0271d993bde06, type: 3}
-  currentStage: 3
+  - {fileID: 3158769427801296158, guid: 533817d1d28862341a796d10ff51dd1b, type: 3}
+  bossRoomPrefab: {fileID: 6964855192061356750, guid: e6fb1c7ec194e4847bfae0105ad80925, type: 3}
+  treasureRoomPrefab: {fileID: 8363081217303354869, guid: cc7e24686132b424fbd0271d993bde06, type: 3}
+  currentStage: 0
 --- !u!4 &1525315259
 Transform:
   m_ObjectHideFlags: 0

@@ -2768,6 +2768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BaseRoom
   roomSize: {x: 1, y: 1}
+  isTreasureRoom: 1
 --- !u!1 &6876954775696002453
 GameObject:
   m_ObjectHideFlags: 0
