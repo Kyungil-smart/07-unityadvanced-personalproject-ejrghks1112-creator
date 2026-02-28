@@ -19,6 +19,7 @@ public class MapManager : MonoBehaviour
     Vector2Int bossRoomPos = new Vector2Int(-100, -100);
     Vector2Int treasurePos = new Vector2Int(-100, -100);
     private List<Vector2Int> endPos;
+    [SerializeField] private Door[] doors;
 
     private void Awake()
     {
@@ -28,6 +29,8 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         DrawMap();
+        doors = FindObjectsByType<Door>(FindObjectsSortMode.None);
+        CheckDoor();
     }
 
     void Init()
@@ -41,6 +44,15 @@ public class MapManager : MonoBehaviour
         CreateTreasureRoom();
     }
 
+    void CheckDoor()
+    {
+        foreach (var door in doors)
+        {
+            Debug.Log("문체크 시작");
+            door.CheckNeighborRoom();
+        }
+    }
+
     void DrawMap()
     {
         foreach (var pos in roomPos)
@@ -49,15 +61,37 @@ public class MapManager : MonoBehaviour
             if (pos == Vector2Int.zero) room = mapPrefabs[0];
             else if (pos == bossRoomPos) room = bossRoomPrefab;
             else if (pos == treasurePos) room = treasureRoomPrefab;
-            else
-            {
-                if (roomGrid.TryGetValue(pos, out GameObject map)) room = map;
-            }
+            else roomGrid.TryGetValue(pos, out room);
 
             if (room != null)
             {
                 Vector2 spawnPos = new Vector2(pos.x * roomWidth, pos.y * roomHeight);
-                Instantiate(room, spawnPos, Quaternion.identity);
+                 GameObject doors = Instantiate(room, spawnPos, Quaternion.identity);
+                 BaseRoom door = doors.GetComponent<BaseRoom>();
+
+                // if (door != null)
+                // {
+                //     Vector2Int size = door.roomSize;
+                //     bool up = false;
+                //     bool down = false;
+                //     bool left = false;
+                //     bool right = false;
+                //
+                //     for (int i = 0; i < size.x; i++)
+                //     {
+                //         if (roomGrid.ContainsKey(pos + new Vector2Int(i, size.y))) up = true;
+                //         if (roomGrid.ContainsKey(pos + new Vector2Int(i, -1))) down = true;
+                //     }
+                //
+                //     for (int j = 0; j < size.y; j++)
+                //     {
+                //         if (roomGrid.ContainsKey(pos + new Vector2Int(size.x, j))) right = true;
+                //         if (roomGrid.ContainsKey(pos + new Vector2Int(-1, j))) left = true;
+                //     }
+                //
+                //     door.SetDoor(up, down, left, right);
+                //     door.OpenAllDoor();
+                //   }
             }
         }
     }
@@ -209,6 +243,7 @@ public class MapManager : MonoBehaviour
         {
             treasurePos = endPos[UnityEngine.Random.Range(0, endPos.Count)];
         }
+        
         else if (endPos.Count == 0)
         {
             foreach (var pos in roomPos)
@@ -237,32 +272,32 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
-        {
-            if (roomGrid == null) return;
-            foreach (var pair in roomGrid)
-            {
-                Vector2Int pos = pair.Key;
-                Vector3 worldPos = new Vector3(pos.x * roomWidth, pos.y * roomHeight, 0);
-
-                if (pos == treasurePos)
-                {
-                    Gizmos.color = Color.red;
-                }
-                else if (pos == bossRoomPos)
-                {
-                    Gizmos.color = Color.cadetBlue;
-                }
-                else
-                {
-                    Gizmos.color = Color.yellowNice;
-                }
-
-                Gizmos.DrawWireCube(worldPos, new Vector3(roomWidth, roomHeight, .1f));
-
-            }
-        }
-    }
+    // void OnDrawGizmos()
+    // {
+    //         if (roomGrid == null) return;
+    //         foreach (var pair in roomGrid)
+    //         {
+    //             Vector2Int pos = pair.Key;
+    //             Vector3 worldPos = new Vector3(pos.x * roomWidth, pos.y * roomHeight, 0);
+    //
+    //             if (pos == treasurePos)
+    //             {
+    //                 Gizmos.color = Color.red;
+    //             }
+    //             else if (pos == bossRoomPos)
+    //             {
+    //                 Gizmos.color = Color.cadetBlue;
+    //             }
+    //             else
+    //             {
+    //                 Gizmos.color = Color.yellowNice;
+    //             }
+    //
+    //             Gizmos.DrawWireCube(worldPos, new Vector3(roomWidth, roomHeight, .1f));
+    //
+    //         }
+    // }
+}
 
 
 public enum StageType

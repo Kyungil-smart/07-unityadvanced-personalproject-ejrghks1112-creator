@@ -267,70 +267,16 @@ GameObject:
   - component: {fileID: 573586831}
   - component: {fileID: 573586830}
   - component: {fileID: 573586829}
-  - component: {fileID: 573586828}
   - component: {fileID: 573586833}
   - component: {fileID: 573586834}
+  - component: {fileID: 573586835}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!68 &573586828
-EdgeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 573586826}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -0.3766557, y: 0.37319577}
-  - {x: -0.24778248, y: 0.5055032}
-  - {x: 0.24968909, y: 0.50453115}
-  - {x: 0.37994713, y: 0.3857829}
-  - {x: 0.37865508, y: -0.1239813}
-  - {x: 0.19272582, y: -0.26020855}
-  - {x: 0.19355784, y: -0.44234464}
-  - {x: 0.122862004, y: -0.5014866}
-  - {x: -0.12720048, y: -0.5058958}
-  - {x: -0.1980408, y: -0.44165882}
-  - {x: -0.19802946, y: -0.25980568}
-  - {x: -0.38119745, y: -0.1314261}
-  - {x: -0.37606138, y: 0.37952113}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
 --- !u!50 &573586829
 Rigidbody2D:
   serializedVersion: 5
@@ -457,6 +403,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   _moveSpeed: 5
+--- !u!58 &573586835
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 573586826}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.1}
+  m_Radius: 0.26073033
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,6 +559,7 @@ MonoBehaviour:
   bossRoomPrefab: {fileID: 6964855192061356750, guid: e6fb1c7ec194e4847bfae0105ad80925, type: 3}
   treasureRoomPrefab: {fileID: 8363081217303354869, guid: cc7e24686132b424fbd0271d993bde06, type: 3}
   currentStage: 0
+  doors: []
 --- !u!4 &1525315259
 Transform:
   m_ObjectHideFlags: 0
