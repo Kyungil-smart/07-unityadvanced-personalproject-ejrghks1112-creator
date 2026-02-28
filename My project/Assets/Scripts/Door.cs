@@ -17,12 +17,28 @@ public class Door : MonoBehaviour
 
         if (hit != null)
         {
-            Debug.Log("문체크 완 열린문감지");
             OpenDoor();
         }
         else
         {
-            Debug.Log("감지 실패 문 닫기");
+            CloseDoor();
+        }
+    }
+
+    public void OpenDoorIsRoomCleared()
+    {
+        Vector3 doorWorldPos = transform.position;
+        Vector3 direction = transform.up;
+        Vector3 check = doorWorldPos + direction;
+        
+        Collider2D hit = Physics2D.OverlapCircle(check, 0.2f, doorLayerMask);
+
+        if (hit != null)
+        {
+            OpenDoor();
+        }
+        else
+        {
             CloseDoor();
         }
     }

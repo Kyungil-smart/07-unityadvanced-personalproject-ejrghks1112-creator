@@ -48,7 +48,6 @@ public class MapManager : MonoBehaviour
     {
         foreach (var door in doors)
         {
-            Debug.Log("문체크 시작");
             door.CheckNeighborRoom();
         }
     }

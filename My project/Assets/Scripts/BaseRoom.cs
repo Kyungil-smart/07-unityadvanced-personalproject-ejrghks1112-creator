@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BaseRoom : MonoBehaviour
 {
@@ -10,23 +11,40 @@ public class BaseRoom : MonoBehaviour
     [SerializeField] List<Door> doorD  = new List<Door>();
     [SerializeField] List<Door> doorL  = new List<Door>();
     [SerializeField] List<Door> doorR = new List<Door>();
+    private MonsterManager _monster;
+    private Door _door;
 
-    private bool _isClear = false;
+    private void Awake()
+    {
+        _monster = GetComponent<MonsterManager>();
+        _door = GetComponent<Door>();
+    }
+
+    public bool _isClear = false;
     bool _isPlayerInRoom = false;
 
     public void OnPlayerEnter()
     {
-        if (!_isClear && _isPlayerInRoom)
+        if (!_isClear && _isPlayerInRoom && !isTreasureRoom)
         {
+            Debug.Log("몹 스폰 개시");
             CloseAllDoor();
-            //적 스폰
+            _monster.SpawnMob();
         }
     }
 
+    void Update()
+    {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            RoomClear();
+        }
+    }
+    
     public void RoomClear()
     {
         _isClear = true;
-        OpenAllDoor();
+        _door.OpenDoorIsRoomCleared();
     }
 
     public void CloseAllDoor()
@@ -54,27 +72,11 @@ public class BaseRoom : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
+            Debug.Log("플레이어 입장");
             _isPlayerInRoom = true;
+            OnPlayerEnter();
         }
-            
-    }
-
-    public void SetDoor(bool up, bool down, bool left, bool right)
-    {
-        if (!up) FakeDoor(doorU);
-        if (!down) FakeDoor(doorD);
-        if (!left) FakeDoor(doorL);
-        if (!right) FakeDoor(doorR);
-    }
-
-    void FakeDoor(List<Door> doors)
-    {
-        foreach (Door door in doors)
-        {
-            if(door != null) door.gameObject.SetActive(true);
-        }
-        doors.Clear();
     }
 }
