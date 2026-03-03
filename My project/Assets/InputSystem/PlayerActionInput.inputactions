@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "PlayerInput",
+    "name": "PlayerActionInput",
     "maps": [
         {
             "name": "PlayerAction",
@@ -17,7 +17,7 @@
                 },
                 {
                     "name": "Attack",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "0797012f-95c5-4d3d-b429-20d2c81ff87b",
                     "expectedControlType": "",
                     "processors": "",

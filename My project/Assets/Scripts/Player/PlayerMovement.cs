@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private PlayerInput _input;
+    private PlayerActionInput _input;
     private Rigidbody2D _rb;
     Vector2 _moveInput;
     
@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Init()
     {
-        _input = new PlayerInput();
+        _input = new PlayerActionInput();
         _rb = GetComponent<Rigidbody2D>();
     }
 }
