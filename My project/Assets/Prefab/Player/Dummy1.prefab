@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2290151018513587157}
   - component: {fileID: 7486444280153455661}
   m_Layer: 0
-  m_Name: playerPrefab
+  m_Name: Dummy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6598946016331564889, guid: 23748c298f885bf4c89671f6d30f562b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   playerMaxHP: 100
   playerCurrentHP: 0
-  playerDamage: 5
+  playerDamage: 30
   _attackCD: 2
   _muzzlePoint: {fileID: 3483816108982647654}
   _playerBulletPrefab: {fileID: 2124097171545838707, guid: 0297c0fa72cfaac47bf563876a71aeb3, type: 3}

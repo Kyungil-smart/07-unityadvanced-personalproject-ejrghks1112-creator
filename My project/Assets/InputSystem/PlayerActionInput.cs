@@ -225,7 +225,7 @@ public partial class @PlayerActionInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""33b42a88-ab61-4dea-98ce-30123b789e45"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Mouse>/press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

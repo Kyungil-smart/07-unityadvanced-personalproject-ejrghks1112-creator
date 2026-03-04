@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2962109784312354561}
   - component: {fileID: 2573948341306887366}
   - component: {fileID: 8164343609530901751}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Jelly 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,6 +132,7 @@ MonoBehaviour:
   _mobMoveSpeed: 7
   _detectRange: 7
   _player: {fileID: 0}
+  _hp: 30
 --- !u!50 &2573948341306887366
 Rigidbody2D:
   serializedVersion: 5

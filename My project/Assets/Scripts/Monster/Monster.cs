@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
 
-public class Monster : MonoBehaviour
+public class Monster : MonoBehaviour,IDamagable
 {
     [SerializeField] private float _mobMoveSpeed;
     [SerializeField] private float _detectRange;
-    [SerializeField]private GameObject _player;
+    [SerializeField] private GameObject _player;
+    [SerializeField] private float _hp;
     private Rigidbody2D _rb;
 
     private void Awake()
@@ -38,10 +39,26 @@ public class Monster : MonoBehaviour
         }
         else _rb.linearVelocity = Vector2.zero;
     }
+    
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _detectRange);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _hp -= damage;
+        Die();
+    }
+
+    void Die()
+    {
+        if (_hp <= 0)
+        {
+            gameObject.SetActive(false);
+        }
+        else return;
     }
 }

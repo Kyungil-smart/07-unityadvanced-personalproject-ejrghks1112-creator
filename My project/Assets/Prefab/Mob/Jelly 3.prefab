@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3259845202214006136}
   - component: {fileID: 3984348758496344363}
   - component: {fileID: 7815429902906875138}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Jelly 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,8 +130,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   _mobMoveSpeed: 4
-  _detectRange: 7
+  _detectRange: 3
   _player: {fileID: 0}
+  _hp: 30
 --- !u!50 &3984348758496344363
 Rigidbody2D:
   serializedVersion: 5

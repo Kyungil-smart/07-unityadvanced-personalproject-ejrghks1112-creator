@@ -67,6 +67,8 @@ public class MapManager : MonoBehaviour
                 Vector2 spawnPos = new Vector2(pos.x * roomWidth, pos.y * roomHeight);
                  GameObject doors = Instantiate(room, spawnPos, Quaternion.identity);
                  BaseRoom door = doors.GetComponent<BaseRoom>();
+                 
+                 if(room == treasureRoomPrefab || room == mapPrefabs[0]) door.isTreasureRoom = true;
 
                 // if (door != null)
                 // {

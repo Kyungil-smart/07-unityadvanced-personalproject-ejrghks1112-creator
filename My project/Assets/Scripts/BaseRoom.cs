@@ -2,19 +2,26 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class BaseRoom : MonoBehaviour
 {
     public Vector2Int roomSize = new Vector2Int(2, 2);
-    [SerializeField] public bool isTreasureRoom = false;
+    [SerializeField] public bool isTreasureRoom;
     [SerializeField] List<Door> doorU  = new List<Door>();
     [SerializeField] List<Door> doorD  = new List<Door>();
     [SerializeField] List<Door> doorL  = new List<Door>();
     [SerializeField] List<Door> doorR = new List<Door>();
     private MonsterManager _monster;
     private Door _door;
+    [SerializeField] public CinemachineCamera _roomCamera;
 
     private void Awake()
+    {
+       Init();
+    }
+
+    void Init()
     {
         _monster = GetComponent<MonsterManager>();
         _door = GetComponent<Door>();
@@ -32,19 +39,12 @@ public class BaseRoom : MonoBehaviour
             _monster.SpawnMob();
         }
     }
-
-    void Update()
-    {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            RoomClear();
-        }
-    }
     
     public void RoomClear()
     {
         _isClear = true;
-        _door.OpenDoorIsRoomCleared();
+        OpenAllDoor();
+        _isClear = false;
     }
 
     public void CloseAllDoor()
@@ -74,9 +74,20 @@ public class BaseRoom : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _roomCamera.Priority = 11;
+            _roomCamera.Lens.OrthographicSize = 27f;
+            
             Debug.Log("플레이어 입장");
             _isPlayerInRoom = true;
             OnPlayerEnter();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            _roomCamera.Priority = 10;
         }
     }
 }

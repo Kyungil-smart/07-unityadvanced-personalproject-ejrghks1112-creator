@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private PlayerBulletManager _bulletManagerPrefab;
 
     private WaitForSeconds AttackCD;
-    private PlayerActionInput _input;
+    // private PlayerActionInput _input;
     public bool CanAttack;
     public bool IsDead;
     
@@ -31,23 +31,33 @@ public class PlayerController : MonoBehaviour, IDamagable
         Init();
     }
 
-    private void OnEnable()
+    /* private void OnEnable()
     {
-        _input.PlayerAction.Attack.performed += OnAttack;
         _input.PlayerAction.Enable();
+        _input.PlayerAction.Attack.performed += OnAttack;
     }
-    
+
     private void OnDisable()
     {
         _input.PlayerAction.Attack.performed -= OnAttack;
         _input.PlayerAction.Disable();
     }
 
-    void OnAttack(InputAction.CallbackContext ctx)
+    private void OnAttack(InputAction.CallbackContext ctx)
     {
+        Debug.Log("공격시도");
         Attack();
     }
-    
+    */
+
+    private void Update()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Attack();
+        }
+    }
+
     private void Attack()
     {
         Debug.Log("공격시도");
@@ -67,12 +77,18 @@ public class PlayerController : MonoBehaviour, IDamagable
     
     Quaternion GetRot()
     {
-        return _muzzlePoint.transform.rotation;
+        
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 dir = (mousePos - GetPos()).normalized;
+        
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        
+        return Quaternion.Euler(0f, 0f, angle);
     }
     
     private void Init()
     {
-        _input = new PlayerActionInput();
+        // _input = new PlayerActionInput();
         playerCurrentHP = playerMaxHP;
         CanAttack = true;
 

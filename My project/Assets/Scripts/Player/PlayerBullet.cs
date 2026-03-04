@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerBullet : MonoBehaviour
+public class PlayerBullet : MonoBehaviour, IShootable
 {
     
     [Header("총알 속도")]
@@ -10,19 +10,22 @@ public class PlayerBullet : MonoBehaviour
     [SerializeField] private float _bulletLifeTime;
     [Header("총알 프리펩")]
     [SerializeField] GameObject _playerBulletPrefab;
-
+    
     private float _bulletDamage;
-    private Rigidbody _rigidbody;
+    private Rigidbody2D _rb;
     private PlayerController _playerController;
     private WaitForSeconds bulletLifetime;
-
+    [SerializeField]private float _bulletDontBreakTime;
+    
     private void Awake()
     {
        Init();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
+        if (Time.time - _bulletDontBreakTime < 0.05f) return;
+        
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             PlayerBulletManager.Instance.DespawnBullet(this);
@@ -30,26 +33,34 @@ public class PlayerBullet : MonoBehaviour
             IDamagable damagable = other.gameObject.GetComponent<IDamagable>();
             if(damagable != null) damagable.TakeDamage(_bulletDamage);
         }
+        
+        if(other.CompareTag("Wall"))
+        {
+            Debug.Log("벽에 부딛힘");
+            PlayerBulletManager.Instance.DespawnBullet(this);
+        }
     }
 
     private void Init()
     {
         _playerController = FindAnyObjectByType<PlayerController>();
-        _rigidbody = GetComponent<Rigidbody>();
+        _rb = GetComponent<Rigidbody2D>();
         bulletLifetime = new WaitForSeconds(_bulletLifeTime);
     }
 
     public void OnSpawn()
     {
+        _bulletDontBreakTime = Time.time;
+        
         _bulletDamage = _playerController.playerDamage;
-        _rigidbody.linearVelocity = transform.forward * _bulletSpeed;
+        _rb.linearVelocity = transform.right * _bulletSpeed;
         
         StartCoroutine(bulletCoroutine());
     }
 
     public void OnDespawn()
     {
-        _rigidbody.linearVelocity = Vector3.zero;
+        _rb.linearVelocity = Vector3.zero;
         StopCoroutine(bulletCoroutine());
     }
 

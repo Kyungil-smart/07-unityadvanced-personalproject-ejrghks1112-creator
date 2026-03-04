@@ -27,20 +27,7 @@ public class Door : MonoBehaviour
 
     public void OpenDoorIsRoomCleared()
     {
-        Vector3 doorWorldPos = transform.position;
-        Vector3 direction = transform.up;
-        Vector3 check = doorWorldPos + direction;
-        
-        Collider2D hit = Physics2D.OverlapCircle(check, 0.2f, doorLayerMask);
-
-        if (hit != null)
-        {
-            OpenDoor();
-        }
-        else
-        {
-            CloseDoor();
-        }
+        CheckNeighborRoom();
     }
 
     private void OnDrawGizmos()
