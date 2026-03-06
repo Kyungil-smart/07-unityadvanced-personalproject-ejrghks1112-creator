@@ -1,1 +1,4 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=22871637&assignment_repo_type=AssignmentRepo)
+방을 클리어하고 다음 스테이지로 넘어가는 로그라이크 게임을 제작하고 싶었습니다
+
+wasd : 이동 
+마우스 좌클릭 : 공격 
