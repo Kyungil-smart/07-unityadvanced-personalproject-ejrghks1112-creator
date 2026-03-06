@@ -8,12 +8,13 @@ public class BaseRoom : MonoBehaviour
 {
     public Vector2Int roomSize = new Vector2Int(2, 2);
     [SerializeField] public bool isTreasureRoom;
+    [SerializeField] public bool isBossRoom;
     [SerializeField] List<Door> doorU  = new List<Door>();
     [SerializeField] List<Door> doorD  = new List<Door>();
     [SerializeField] List<Door> doorL  = new List<Door>();
     [SerializeField] List<Door> doorR = new List<Door>();
     private MonsterManager _monster;
-    private Door _door;
+    [SerializeField] private Portal _portal;
     [SerializeField] public CinemachineCamera _roomCamera;
 
     private void Awake()
@@ -24,7 +25,6 @@ public class BaseRoom : MonoBehaviour
     void Init()
     {
         _monster = GetComponent<MonsterManager>();
-        _door = GetComponent<Door>();
     }
 
     public bool _isClear = false;
@@ -32,31 +32,36 @@ public class BaseRoom : MonoBehaviour
 
     public void OnPlayerEnter()
     {
-        if (!_isClear && _isPlayerInRoom && !isTreasureRoom)
+        if (!_isClear && !isTreasureRoom)
         {
-            Debug.Log("몹 스폰 개시");
             CloseAllDoor();
-            _monster.SpawnMob();
+            MonsterManager.Instance.SpawnMob(this);
         }
     }
-    
+
     public void RoomClear()
     {
         _isClear = true;
-        OpenAllDoor();
-        _isClear = false;
+        if(isBossRoom == true && _portal != null) _portal.gameObject.SetActive(true);
+        OpenDoor();
     }
 
     public void CloseAllDoor()
     {
-        GetAllDoor().ForEach(door => door.CloseDoor());
+        foreach (Door door in GetAllDoor())
+        {
+            if (door != null && door._isOpen)
+            {
+                door.CloseDoor();
+            }
+        }
     }
 
-    public void OpenAllDoor()
+    public void OpenDoor()
     {
         foreach (Door door in GetAllDoor())
         {
-            if (door != null && door.gameObject.activeSelf) door.OpenDoor();
+            if (door != null && door._isOpen) door.OpenDoor();
         }
     }
 
@@ -75,9 +80,9 @@ public class BaseRoom : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _roomCamera.Priority = 11;
-            _roomCamera.Lens.OrthographicSize = 27f;
+            _roomCamera.Lens.OrthographicSize = 14f;
+            _roomCamera.Target.TrackingTarget = other.transform;
             
-            Debug.Log("플레이어 입장");
             _isPlayerInRoom = true;
             OnPlayerEnter();
         }

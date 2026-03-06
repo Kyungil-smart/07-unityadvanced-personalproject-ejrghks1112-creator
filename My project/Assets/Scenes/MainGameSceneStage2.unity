@@ -226,7 +226,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 21.514679
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -251,7 +251,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.62, y: 0.05, z: 0}
+  m_LocalPosition: {x: 17.446266, y: 39.17297, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -465,7 +465,7 @@ MonoBehaviour:
   - {fileID: 3158769427801296158, guid: 533817d1d28862341a796d10ff51dd1b, type: 3}
   bossRoomPrefab: {fileID: 6964855192061356750, guid: e6fb1c7ec194e4847bfae0105ad80925, type: 3}
   treasureRoomPrefab: {fileID: 8363081217303354869, guid: cc7e24686132b424fbd0271d993bde06, type: 3}
-  currentStage: 0
+  currentStage: 1
   doors: []
 --- !u!4 &1525315259
 Transform:
@@ -517,6 +517,9 @@ MonoBehaviour:
   - {fileID: 1045684952157074566, guid: 238b3feb1cba85440b0c09b815edbb15, type: 3}
   - {fileID: 1046215558161939464, guid: 2de298fc43bb84c438c9b7f5039bab39, type: 3}
   - {fileID: 5452160941123156446, guid: 0f925ef159a40d645be63800c9b4c3b4, type: 3}
+  _bossMonsterPrefabs:
+  - {fileID: 4704091562163145587, guid: b6f45c1faea1f4b49bc673cad760ce5f, type: 3}
+  - {fileID: 7556523403868258414, guid: d06b0b05789d89f4fab5fe7157b00093, type: 3}
   minMobSpawn: 4
   maxMobSpawn: 8
 --- !u!4 &1790807859
@@ -542,9 +545,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5183335834238231836, guid: db57ef0c69dc34140b23b85e8c77495c, type: 3}
+      propertyPath: _attackCD
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5183335834238231836, guid: db57ef0c69dc34140b23b85e8c77495c, type: 3}
+      propertyPath: playerDamage
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 5775150237750669263, guid: db57ef0c69dc34140b23b85e8c77495c, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5775150237750669263, guid: db57ef0c69dc34140b23b85e8c77495c, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7800456779786444538, guid: db57ef0c69dc34140b23b85e8c77495c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -585,6 +600,10 @@ PrefabInstance:
     - target: {fileID: 7800456779786444538, guid: db57ef0c69dc34140b23b85e8c77495c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8218909052573926297, guid: db57ef0c69dc34140b23b85e8c77495c, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

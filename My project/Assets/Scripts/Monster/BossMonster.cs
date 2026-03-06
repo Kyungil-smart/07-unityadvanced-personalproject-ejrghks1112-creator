@@ -1,18 +1,14 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
-public class Monster : MonoBehaviour,IDamagable
+public class BossMonster : MonoBehaviour
 {
     [SerializeField] private float _mobMoveSpeed;
-    [SerializeField] private float _monsterDamage;
     [SerializeField] private float _detectRange;
     [SerializeField] private GameObject _player;
     [SerializeField] private float _hp;
     private BaseRoom _room;
     private Rigidbody2D _rb;
     private MonsterManager _monsterManager;
-    private bool isGetDamage;
 
     private void Awake()
     {
@@ -46,15 +42,6 @@ public class Monster : MonoBehaviour,IDamagable
         else _rb.linearVelocity = Vector2.zero;
     }
 
-    void OnTriggerStay2D(Collider2D other)
-    {
-        if (other.CompareTag("Player") && !isGetDamage)
-        {
-            StartCoroutine(DamageCoroutine(other));
-        }
-
-    }
-
     public void SetRoom(BaseRoom room)
     {
         _room = room;
@@ -76,18 +63,10 @@ public class Monster : MonoBehaviour,IDamagable
     {
         if (_hp <= 0)
         {
+            Debug.Log("몹하나 죽음");
             MonsterManager.Instance.CheckLeftMonster(_room, gameObject);
             gameObject.SetActive(false);
         }
         else return;
-    }
-
-    IEnumerator DamageCoroutine(Collider2D player)
-    {
-        isGetDamage = true;
-        IDamagable damagable = player.gameObject.GetComponent<IDamagable>();
-        if(damagable != null) damagable.TakeDamage(_monsterDamage);
-        yield return new WaitForSeconds(1.5f);
-        isGetDamage = false;
     }
 }

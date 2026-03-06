@@ -21,8 +21,9 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private GameObject _playerBulletPrefab;
     [SerializeField] private PlayerBulletManager _bulletManagerPrefab;
 
+    private Coroutine _attackingCoroutine;
     private WaitForSeconds AttackCD;
-    // private PlayerActionInput _input;
+    private PlayerActionInput _input;
     public bool CanAttack;
     public bool IsDead;
     
@@ -31,43 +32,46 @@ public class PlayerController : MonoBehaviour, IDamagable
         Init();
     }
 
-    /* private void OnEnable()
+    private void OnEnable() 
     {
         _input.PlayerAction.Enable();
-        _input.PlayerAction.Attack.performed += OnAttack;
+        _input.PlayerAction.Attack.started += OnAttackStart;
+        _input.PlayerAction.Attack.canceled += OnAttackCancel;
     }
 
     private void OnDisable()
     {
-        _input.PlayerAction.Attack.performed -= OnAttack;
+        _input.PlayerAction.Attack.started -= OnAttackStart;
+        _input.PlayerAction.Attack.canceled -= OnAttackCancel;
         _input.PlayerAction.Disable();
     }
 
-    private void OnAttack(InputAction.CallbackContext ctx)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("공격시도");
-        Attack();
-    }
-    */
-
-    private void Update()
-    {
-        if (Input.GetMouseButton(0))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Portal"))
         {
-            Attack();
+            SceneManager.Instance.CheckCurrentScene();
         }
     }
 
+    private void OnAttackStart(InputAction.CallbackContext ctx)
+    {
+        if (_attackingCoroutine != null) StopCoroutine(_attackingCoroutine);
+
+        _attackingCoroutine = StartCoroutine(AttackingCoroutine());
+    }
+
+    void OnAttackCancel(InputAction.CallbackContext ctx)
+    {
+        if(_attackingCoroutine != null) StopCoroutine(_attackingCoroutine);
+    }
+    
+
     private void Attack()
     {
-        Debug.Log("공격시도");
-        if (!CanAttack) return;
-        
         Vector3 bulletPos = GetPos();
         Quaternion bulletRot = GetRot(); 
         PlayerBulletManager.Instance.ShootBullet(bulletPos, bulletRot);
-        StartCoroutine(AttackCDCoroutine());
-        CanAttack = false;
     }
     
     Vector3 GetPos()
@@ -87,8 +91,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     }
     
     private void Init()
-    {
-        // _input = new PlayerActionInput();
+    { 
+        _input = new PlayerActionInput();
         playerCurrentHP = playerMaxHP;
         CanAttack = true;
 
@@ -105,10 +109,16 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (playerCurrentHP <= 0) Die();
     }
     
-    IEnumerator AttackCDCoroutine()
+    IEnumerator AttackingCoroutine()
     {
-        yield return new WaitForSeconds(_attackCD);
-        CanAttack = true;
+        while (true)
+        {
+            Attack();
+            
+            CanAttack = false;
+            yield return new WaitForSeconds(_attackCD);
+            CanAttack = true;
+        }
     }
 
     private void Die()

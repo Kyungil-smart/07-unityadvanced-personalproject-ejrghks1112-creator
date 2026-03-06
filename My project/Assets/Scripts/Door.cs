@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : MonoBehaviour
 {
     [SerializeField] private GameObject door;
     public LayerMask doorLayerMask;
+    public bool _isOpen;
 
     public void CheckNeighborRoom()
     {
@@ -17,17 +19,14 @@ public class Door : MonoBehaviour
 
         if (hit != null)
         {
+            _isOpen = true;
             OpenDoor();
         }
         else
         {
+            _isOpen = false;
             CloseDoor();
         }
-    }
-
-    public void OpenDoorIsRoomCleared()
-    {
-        CheckNeighborRoom();
     }
 
     private void OnDrawGizmos()

@@ -57,42 +57,19 @@ public class MapManager : MonoBehaviour
         foreach (var pos in roomPos)
         {
             GameObject room = null;
-            if (pos == Vector2Int.zero) room = mapPrefabs[0];
+            if (pos == Vector2Int.zero)  room = mapPrefabs[0];
             else if (pos == bossRoomPos) room = bossRoomPrefab;
             else if (pos == treasurePos) room = treasureRoomPrefab;
-            else roomGrid.TryGetValue(pos, out room);
+            else                         roomGrid.TryGetValue(pos, out room);
 
-            if (room != null)
+            if (room != null && roomGrid.TryGetValue(pos, out GameObject roomPrefab))
             {
-                Vector2 spawnPos = new Vector2(pos.x * roomWidth, pos.y * roomHeight);
-                 GameObject doors = Instantiate(room, spawnPos, Quaternion.identity);
-                 BaseRoom door = doors.GetComponent<BaseRoom>();
+                 Vector2 spawnPos = new Vector2(pos.x * roomWidth, pos.y * roomHeight);
+                 GameObject instance = Instantiate(roomPrefab, spawnPos, Quaternion.identity);
+                 BaseRoom baseRoom = instance.GetComponent<BaseRoom>();
                  
-                 if(room == treasureRoomPrefab || room == mapPrefabs[0]) door.isTreasureRoom = true;
-
-                // if (door != null)
-                // {
-                //     Vector2Int size = door.roomSize;
-                //     bool up = false;
-                //     bool down = false;
-                //     bool left = false;
-                //     bool right = false;
-                //
-                //     for (int i = 0; i < size.x; i++)
-                //     {
-                //         if (roomGrid.ContainsKey(pos + new Vector2Int(i, size.y))) up = true;
-                //         if (roomGrid.ContainsKey(pos + new Vector2Int(i, -1))) down = true;
-                //     }
-                //
-                //     for (int j = 0; j < size.y; j++)
-                //     {
-                //         if (roomGrid.ContainsKey(pos + new Vector2Int(size.x, j))) right = true;
-                //         if (roomGrid.ContainsKey(pos + new Vector2Int(-1, j))) left = true;
-                //     }
-                //
-                //     door.SetDoor(up, down, left, right);
-                //     door.OpenAllDoor();
-                //   }
+                 if(room == bossRoomPrefab) baseRoom.isBossRoom  = true;
+                 if(room == treasureRoomPrefab || room == mapPrefabs[0]) baseRoom.isTreasureRoom = true;
             }
         }
     }
@@ -146,12 +123,11 @@ public class MapManager : MonoBehaviour
         {
             loopSafe++;
 
-            currentPos = roomPos[UnityEngine.Random.Range(0, roomPos.Count)];
-            Vector2Int nextRoomPos = GetNeighborRoom(currentPos);
-
+            Vector2Int randomPos = roomPos[UnityEngine.Random.Range(0, roomPos.Count)];
             int randomIndex = UnityEngine.Random.Range(1, mapPrefabs.Length);
             GameObject selectedPrefab = mapPrefabs[randomIndex];
             Vector2Int roomSize = selectedPrefab.GetComponent<BaseRoom>().roomSize;
+            Vector2Int nextRoomPos = GetNeighborRoom(randomPos, roomSize);
 
             if (CanPlaceRoom(nextRoomPos, roomSize))
             {
@@ -162,11 +138,22 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    Vector2Int GetNeighborRoom(Vector2Int pos)
+    Vector2Int GetNeighborRoom(Vector2Int pos, Vector2Int size)
     {
         Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right, };
+        
+        foreach (var dir in directions)
+        {
+            Vector2Int currentPos = pos;
+            if(dir == Vector2Int.up)     currentPos += new Vector2Int(0, 1);
+            if(dir == Vector2Int.down)   currentPos += new Vector2Int(0, -size.y);
+            if(dir == Vector2Int.left)   currentPos += new Vector2Int(-size.x, 0);
+            if(dir == Vector2Int.right)  currentPos += new Vector2Int(1, 0);
 
-            return pos + directions[UnityEngine.Random.Range(0, directions.Length)];
+            if (CanPlaceRoom(currentPos, size)) return currentPos;
+        }
+
+        return new Vector2Int(-100, -100);
     }
 
     void OccupyGrid(Vector2Int pos, Vector2Int size, GameObject map)
@@ -184,33 +171,25 @@ public class MapManager : MonoBehaviour
 
     void CreateBossRoom()
     {
-        float maxDistance = 0f;
+        Vector2Int targetBasePos = new Vector2Int(-100, -100);
+        Vector2Int bossRoomSize = bossRoomPrefab.GetComponent<BaseRoom>().roomSize;
+        
+        List<Vector2Int> sortedPos = new List<Vector2Int>(roomPos);
+        sortedPos.Sort((a, b) => (Mathf.Abs(b.x) + Mathf.Abs(b.y)).CompareTo(Mathf.Abs(a.x) + Mathf.Abs(a.y)));
 
-        foreach (var pos in roomPos)
+        foreach (var pos in sortedPos)
         { 
             if (pos == Vector2Int.zero) continue;
-
-            float distance = Mathf.Abs(pos.x) + Mathf.Abs(pos.y);
-            if (distance > maxDistance) 
-            {
-                    maxDistance = distance;
-                    bossRoomPos = pos;
-            }
+            targetBasePos = GetNeighborRoom (pos, bossRoomSize);
+            if (targetBasePos != new Vector2Int(-100, -100)) break;
         }
 
-        Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right, };
-        Vector2Int bossRoomSize = bossRoomPrefab.GetComponent<BaseRoom>().roomSize;
-
-        foreach (var dir in directions)
-        { 
-            Vector2Int checkPos = bossRoomPos + dir;
-            if (CanPlaceRoom(checkPos, bossRoomSize))
-            {
-                    bossRoomPos = checkPos;
-                    roomPos.Add(bossRoomPos);
-                    OccupyGrid(bossRoomPos, bossRoomSize, bossRoomPrefab);
-                    return;
-            }
+        if (targetBasePos != new Vector2Int(-100, -100))
+        {
+            bossRoomPos = targetBasePos;
+            roomPos.Add(bossRoomPos);
+            OccupyGrid(bossRoomPos, bossRoomSize, bossRoomPrefab);
+            Debug.Log("보스방 생성");
         }
     }
 
@@ -273,31 +252,31 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    // void OnDrawGizmos()
-    // {
-    //         if (roomGrid == null) return;
-    //         foreach (var pair in roomGrid)
-    //         {
-    //             Vector2Int pos = pair.Key;
-    //             Vector3 worldPos = new Vector3(pos.x * roomWidth, pos.y * roomHeight, 0);
-    //
-    //             if (pos == treasurePos)
-    //             {
-    //                 Gizmos.color = Color.red;
-    //             }
-    //             else if (pos == bossRoomPos)
-    //             {
-    //                 Gizmos.color = Color.cadetBlue;
-    //             }
-    //             else
-    //             {
-    //                 Gizmos.color = Color.yellowNice;
-    //             }
-    //
-    //             Gizmos.DrawWireCube(worldPos, new Vector3(roomWidth, roomHeight, .1f));
-    //
-    //         }
-    // }
+    void OnDrawGizmos()
+    {
+            if (roomGrid == null) return;
+            foreach (var pair in roomGrid)
+            {
+                Vector2Int pos = pair.Key;
+                Vector3 worldPos = new Vector3(pos.x * roomWidth, pos.y * roomHeight, 0);
+    
+                if (pos == treasurePos)
+                {
+                    Gizmos.color = Color.red;
+                }
+                else if (pos == bossRoomPos)
+                {
+                    Gizmos.color = Color.blueViolet;
+                }
+                else
+                {
+                    Gizmos.color = Color.yellowNice;
+                }
+    
+                Gizmos.DrawWireCube(worldPos, new Vector3(roomWidth, roomHeight, .1f));
+    
+            }
+    }
 }
 
 

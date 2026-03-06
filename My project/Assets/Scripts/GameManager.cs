@@ -33,4 +33,9 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void OnReturnButtonClick()
+    {
+        SceneManager.Instance.TitleScene();
+    }
 }

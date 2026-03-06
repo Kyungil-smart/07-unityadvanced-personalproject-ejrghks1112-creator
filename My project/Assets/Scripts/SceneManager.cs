@@ -18,9 +18,33 @@ public class SceneManager : MonoBehaviour
         
     }
 
+    public void TitleScene()
+    {
+        LoadScene("TitleScene");
+    }
+
     public void MainGameScene()
     {
-        LoadScene("MainGameScene");
+        LoadScene("MainGameSceneStage1");
+    }
+
+    public void Stage2Scene()
+    {
+        LoadScene("MainGameSceneStage2");
+    }
+
+    public void Stage3Scene()
+    {
+        LoadScene("MainGameSceneStage3");
+    }
+
+    public void CheckCurrentScene()
+    {
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        
+        if(currentScene == "MainGameSceneStage1") Stage2Scene();
+        else if(currentScene == "MainGameSceneStage2") Stage3Scene();
+        else LoadScene("EndScene");
     }
     
     private void LoadScene(string sceneName)
